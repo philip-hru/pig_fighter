@@ -1,0 +1,40 @@
+main {
+    display: flex;
+    justify-content: space-between;
+}
+
+#pig_1 {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    font-size: 200px;
+    transform: translateY(-100%);
+}
+
+#pig_2 {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    font-size: 200px;
+    transform: translateY(-100%);
+}
+
+#ground {
+    border-top: 1px solid green;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+
+}
+
+.name_pig_1 {
+    text-align: center;
+}
+
+.name_pig_2 {
+    text-align: center;
+}
+
+span {
+    display: none;
+}
