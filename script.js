@@ -6,30 +6,11 @@ var pig_1_move_left;
 var pig_1_move_right;
 var pig_2_move_left;
 var pig_2_move_right;
-function punch_1(event) {
-  if (event.key == "s" && pig_1_lifes > 0) {
-    document.getElementById("span_1").style.display = "inline";
-    window.setTimeout(punch_1_hide, 250);
-    if (check_collision() == true) {
-      pig_2_lifes = pig_2_lifes - 20;
-      document.getElementById("2").value = pig_2_lifes;
-    }
-  }
-}
+var pig_1_punch;
+var pig_2_punch;
 
 function punch_1_hide() {
   document.getElementById("span_1").style.display = "none";
-}
-
-function punch_2(event) {
-  if (event.key == ";" && pig_2_lifes > 0) {
-    document.getElementById("span_2").style.display = "inline";
-    window.setTimeout(punch_2_hide, 250);
-    if (check_collision() == true) {
-      pig_1_lifes = pig_1_lifes - 20;
-      document.getElementById("1").value = pig_1_lifes;
-    }
-  }
 }
 
 function punch_2_hide() {
@@ -48,7 +29,14 @@ function move_pig(event) {
   if (event.key == "'" && pig_2_lifes > 0) {
     pig_2_move_right = true;
   }
+  if (event.key == "s" && pig_1_lifes > 0) {
+    pig_1_punch = Date.now();
+  }
+  if (event.key == ";" && pig_2_lifes > 0) {
+    pig_2_punch = Date.now();
+  }
 }
+
 function stop_pig(event) {
   if (event.key == "a") {
     pig_1_move_left = false;
@@ -61,6 +49,12 @@ function stop_pig(event) {
   }
   if (event.key == "'") {
     pig_2_move_right = false;
+  }
+  if (event.key == "s") {
+    pig_1_punch = false;
+  }
+  if (event.key == ";") {
+    pig_2_punch = false;
   }
 }
 
@@ -104,6 +98,26 @@ function repeat() {
     pig_2_position = pig_2_position = pig_2_position - 5;
     document.getElementById("pig_2").style.right = pig_2_position + "px";
   }
+  if (Date.now() - pig_1_punch > 1000 && pig_1_punch) {
+    document.getElementById("span_1").style.display = "inline";
+    window.setTimeout(punch_1_hide, 250);
+    if (check_collision() == true) {
+      pig_2_lifes = pig_2_lifes - 20;
+      document.getElementById("2").value = pig_2_lifes;
+    }
+    pig_1_punch = Date.now();
+  }
+  if (Date.now() - pig_2_punch > 1000 && pig_2_punch) {
+    document.getElementById("span_2").style.display = "inline";
+    window.setTimeout(punch_2_hide, 250);
+    if (check_collision() == true) {
+      pig_1_lifes = pig_1_lifes - 20;
+      document.getElementById("1").value = pig_1_lifes;
+    }
+    pig_2_punch = Date.now();
+  }
+  document.getElementById("fff_1").innerHTML = pig_1_punch;
+  document.getElementById("fff_2").innerHTML = pig_2_punch;
 }
 
 function throttle(f, t) {
@@ -134,8 +148,7 @@ function throttle_1(r, s) {
   };
 }
 
-document.addEventListener("keydown", throttle(punch_1, 250));
-document.addEventListener("keypress", throttle_1(punch_2, 250));
 document.addEventListener("keydown", move_pig);
 document.addEventListener("keyup", stop_pig);
+
 window.setInterval(repeat, 100);
